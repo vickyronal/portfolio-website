@@ -1,0 +1,86 @@
+import { gsap, ScrollTrigger, SplitText, reduced } from '../core/motion.js';
+
+// Desktop: pinned horizontal scroll through the chapters.
+// Mobile / reduced motion: chapters stack vertically.
+// Returns progress() 0..1 so the particle field can follow along.
+export function initJourney() {
+  const section = document.querySelector('.journey');
+  const track = section.querySelector('[data-journey-track]');
+  const chapters = [...track.querySelectorAll('.chapter')];
+  const bar = section.querySelector('.journey__bar i');
+  const counter = section.querySelector('[data-journey-count]');
+  const total = chapters.length;
+  let active = null;
+
+  const setCount = (p) => {
+    const i = Math.min(total - 1, Math.floor(p * total * 0.999));
+    if (counter) counter.textContent = chapters[i].querySelector('.chapter__year').textContent;
+    chapters.forEach((c, j) => c.classList.toggle('is-active', j === i));
+  };
+
+  if (reduced) {
+    active = ScrollTrigger.create({ trigger: section, start: 'top center', end: 'bottom center', onUpdate: (self) => setCount(self.progress) });
+    return { progress: () => active.progress };
+  }
+
+  const mm = gsap.matchMedia();
+
+  mm.add('(min-width: 900px)', () => {
+    const distance = () => track.scrollWidth - window.innerWidth;
+    const tween = gsap.to(track, { x: () => -distance(), ease: 'none' });
+    active = ScrollTrigger.create({
+      trigger: section,
+      start: 'top top',
+      end: () => '+=' + distance(),
+      pin: true,
+      scrub: 1,
+      animation: tween,
+      anticipatePin: 1,
+      snap: { snapTo: 1 / (total - 1), duration: { min: 0.3, max: 0.9 }, delay: 0.12, ease: 'power2.inOut' },
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        gsap.set(bar, { scaleX: self.progress });
+        setCount(self.progress);
+      },
+    });
+
+    chapters.forEach((ch, i) => {
+      const year = ch.querySelector('.chapter__year');
+      const parts = ch.querySelectorAll('.chapter__count, .chapter__meta, .chapter__story, .chapter__points li');
+      const title = SplitText.create(ch.querySelector('.chapter__title'), { type: 'chars', mask: 'chars' });
+
+      // big year slides at a different speed than the panel (parallax)
+      gsap.fromTo(year, { xPercent: 30 }, {
+        xPercent: -30, ease: 'none',
+        scrollTrigger: { trigger: ch, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true },
+      });
+
+      const st = i === 0
+        ? { trigger: section, start: 'top 55%', toggleActions: 'play none none reverse' }
+        : { trigger: ch, containerAnimation: tween, start: 'left 65%', toggleActions: 'play none none reverse' };
+      gsap.timeline({ scrollTrigger: st })
+        .from(title.chars, { yPercent: 110, stagger: 0.03, duration: 1.1 })
+        .from(parts, { y: 30, autoAlpha: 0, stagger: 0.06, duration: 1 }, '<0.15');
+    });
+
+    return () => { active = null; };
+  });
+
+  mm.add('(max-width: 899px)', () => {
+    active = ScrollTrigger.create({
+      trigger: section,
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: (self) => setCount(self.progress),
+    });
+    chapters.forEach((ch) => {
+      gsap.from(ch.querySelectorAll('.chapter__inner > *'), {
+        y: 30, autoAlpha: 0, stagger: 0.06, duration: 1,
+        scrollTrigger: { trigger: ch, start: 'top 75%', toggleActions: 'play none none reverse' },
+      });
+    });
+    return () => { active = null; };
+  });
+
+  return { progress: () => (active ? active.progress : 0) };
+}

@@ -1,0 +1,91 @@
+:root { --c: var(--accent); }
+
+.cs-hero {
+  display: grid; gap: clamp(20px, 3vw, 36px);
+  padding: clamp(120px, 18vh, 180px) var(--gutter) clamp(40px, 8vh, 80px);
+}
+.cs-back { color: var(--muted); justify-self: start; transition: color 0.3s; }
+.cs-back:hover { color: var(--c); }
+.cs-hero__eyebrow { color: var(--c); }
+.cs-hero__title {
+  font: 500 clamp(3.5rem, 1rem + 13vw, 15rem)/0.88 var(--f-display); letter-spacing: -0.055em; margin-left: -0.05em;
+}
+.cs-hero__pitch { font-size: var(--fs-lead); line-height: 1.25; max-width: 30ch; letter-spacing: -0.01em; }
+.cs-meta {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 24px;
+  padding-top: 24px; border-top: 1px solid var(--line);
+}
+.cs-meta dt { color: var(--muted); margin-bottom: 8px; }
+.cs-meta dd { font-size: 1.1rem; }
+
+.cs-cover {
+  margin: 0 var(--gutter); aspect-ratio: 16 / 9; border-radius: 28px; overflow: hidden;
+  clip-path: inset(0 0 0 0 round 28px);
+}
+@media (max-width: 720px) { .cs-cover { aspect-ratio: 4 / 5; } }
+
+.cs-block {
+  display: grid; gap: 24px; padding: clamp(64px, 12vh, 140px) var(--gutter);
+  border-bottom: 1px solid var(--line);
+}
+.cs-block__label { color: var(--muted); display: flex; gap: 12px; }
+.cs-block__label span { color: var(--c); }
+.cs-block__body { display: grid; gap: 32px; }
+.cs-block__body > p {
+  font: 500 clamp(1.6rem, 1rem + 2.4vw, 3.2rem)/1.12 var(--f-display); letter-spacing: -0.02em; max-width: 26ch;
+}
+@media (min-width: 900px) {
+  .cs-block { grid-template-columns: minmax(200px, 1fr) 3fr; }
+  .cs-block--wide { grid-template-columns: 1fr; }
+}
+
+.process { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; margin-top: 16px; }
+.process__step {
+  display: grid; gap: 14px; align-content: start; padding: 28px; min-height: 240px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+  transition: border-color 0.4s, transform 0.6s var(--ease-out);
+}
+.process__step:hover { border-color: color-mix(in srgb, var(--c) 60%, transparent); transform: translateY(-6px); }
+.process__step span { color: var(--c); }
+.process__step h3 { font: 500 1.6rem/1.05 var(--f-display); letter-spacing: -0.02em; margin-top: auto; }
+.process__step p { color: var(--muted); }
+
+.competitors { display: flex; flex-wrap: wrap; gap: 12px; }
+.competitors li {
+  font: 500 clamp(1.25rem, 1rem + 1vw, 2rem)/1 var(--f-display);
+  padding: 18px 28px; border: 1px solid var(--line-2); border-radius: 999px;
+}
+
+.cs-gallery {
+  display: grid; gap: 16px; padding: clamp(64px, 12vh, 140px) var(--gutter);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.cs-gallery__item { aspect-ratio: 4 / 3; border-radius: 24px; overflow: hidden; }
+.cs-gallery__item.is-wide { grid-column: 1 / -1; aspect-ratio: 16 / 8; }
+@media (max-width: 720px) {
+  .cs-gallery { grid-template-columns: 1fr; }
+  .cs-gallery__item.is-wide { aspect-ratio: 4 / 3; }
+}
+
+.cs-next {
+  display: grid; gap: 12px; padding: clamp(80px, 16vh, 180px) var(--gutter);
+  border-top: 1px solid var(--line); overflow: hidden; position: relative; isolation: isolate;
+}
+.cs-next::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; background: var(--nc);
+  transform: scaleY(0); transform-origin: bottom; transition: transform 0.8s var(--ease);
+}
+.cs-next:hover::before { transform: scaleY(1); }
+.cs-next:hover { color: var(--accent-ink); }
+.cs-next__label, .cs-next__cat { color: var(--muted); transition: color 0.4s; }
+.cs-next:hover .cs-next__label, .cs-next:hover .cs-next__cat { color: var(--accent-ink); }
+.cs-next__title {
+  font: 500 clamp(3rem, 1rem + 11vw, 13rem)/0.9 var(--f-display); letter-spacing: -0.05em; white-space: nowrap;
+}
+
+.cs-contact {
+  display: grid; gap: 20px; justify-items: start; padding: clamp(64px, 12vh, 140px) var(--gutter);
+  border-top: 1px solid var(--line); color: var(--muted);
+}
+.cs-contact .contact__email { color: var(--text); }
+.cs-contact .contact__email:hover { color: var(--accent-ink); }

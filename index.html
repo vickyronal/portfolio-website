@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vignesh · Senior Visual Designer</title>
+  <meta name="description" content="Vignesh is a Senior Visual & UI Designer in Chennai with 6+ years across brand, UI/UX and digital design. From a pixel to powerful interfaces." />
+  <meta name="theme-color" content="#0B0B0C" />
+  <meta property="og:title" content="Vignesh · Senior Visual Designer" />
+  <meta property="og:description" content="From a pixel to powerful interfaces. Six years of design, told as a story." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/assets/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=general-sans@400,500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" />
+  <script>try{if(sessionStorage.getItem('vg-curtain'))document.documentElement.classList.add('is-arriving')}catch(e){}</script>
+</head>
+<body data-page="home">
+  <a class="skip" href="#work">Skip to work</a>
+
+  <div class="preloader" aria-hidden="true">
+    <span class="preloader__pixel"></span>
+    <span class="preloader__count mono">000</span>
+    <span class="preloader__label mono">Rendering pixels</span>
+  </div>
+  <div class="curtain" aria-hidden="true"><span class="pixel"></span></div>
+  <canvas class="gl" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"><span class="cursor__label"></span></span></div>
+
+  <header class="nav" data-nav>
+    <a href="/" class="nav__logo" aria-label="Vignesh, home"><span class="pixel"></span>Vignesh</a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#journey">Journey</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <span class="nav__clock mono">Chennai · <span data-clock>--:--</span></span>
+  </header>
+
+  <main>
+    <!-- 01 HERO -->
+    <section class="hero" id="top">
+      <div class="hero__content">
+        <p class="hero__eyebrow mono" data-hero-fade>(01) Portfolio · <span data-year>2026</span></p>
+        <h1 class="hero__title">
+          <span class="hero__line">Hey, I’m</span>
+          <span class="hero__line hero__name">Vignesh<span class="hero__dot" aria-hidden="true"></span></span>
+        </h1>
+        <div class="hero__bottom">
+          <p class="hero__intro" data-hero-fade>Senior Visual &amp; UI Designer crafting intuitive digital experiences for startups and brands.</p>
+          <div class="hero__actions" data-hero-fade>
+            <a class="btn btn--accent" href="/assets/cv.pdf" download data-magnetic><span class="btn__inner">Download CV <span aria-hidden="true">↓</span></span></a>
+            <a class="btn btn--ghost" href="#work" data-magnetic><span class="btn__inner">See the work</span></a>
+          </div>
+        </div>
+        <div class="hero__foot mono" data-hero-fade>
+          <span>Currently · Payan Design Studio</span>
+          <span class="hero__scroll">Scroll to begin the story <i></i></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 PROLOGUE -->
+    <section class="prologue" aria-labelledby="prologue-title">
+      <p class="label mono" id="prologue-title">(02) Prologue</p>
+      <p class="prologue__text" data-skew>Every interface begins as a single pixel. Mine began in 2018, cutting frames as a video editor. Then came shapes, then screens, then systems. Six years later, I lead visual design that turns briefs into stories people remember.</p>
+    </section>
+
+    <!-- 03 JOURNEY -->
+    <section class="journey" id="journey" aria-labelledby="journey-title">
+      <div class="journey__head">
+        <h2 class="label mono" id="journey-title">(03) The Journey · 2018 → Now</h2>
+        <div class="journey__progress mono"><span data-journey-count>2018</span><span class="journey__bar"><i></i></span><span>Now</span></div>
+      </div>
+      <div class="journey__track" data-journey-track></div>
+    </section>
+
+    <!-- 04 WORK -->
+    <section class="work" id="work" aria-labelledby="work-title">
+      <div class="section-head">
+        <p class="label mono">(04) Selected work</p>
+        <h2 class="section-title" id="work-title" data-split data-skew>Pixels that became products.</h2>
+      </div>
+      <ol class="work__list" data-work-list></ol>
+    </section>
+
+    <!-- 05 CRAFT -->
+    <section class="craft" aria-labelledby="craft-title">
+      <div class="section-head">
+        <p class="label mono">(05) Craft</p>
+        <h2 class="section-title" id="craft-title" data-split data-skew>Four disciplines, one eye for detail.</h2>
+      </div>
+      <div class="craft__grid" data-skills></div>
+      <div class="marquee" data-marquee data-skew aria-label="Tools I use"></div>
+      <div class="marquee marquee--alt" data-marquee data-skew aria-hidden="true"></div>
+    </section>
+
+    <!-- 06 NUMBERS -->
+    <section class="numbers" aria-label="By the numbers">
+      <p class="label mono">(06) By the numbers</p>
+      <div class="numbers__grid" data-stats></div>
+    </section>
+
+    <!-- 07 CONTACT -->
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <p class="label mono">(07) Final chapter</p>
+      <h2 class="contact__title" id="contact-title" data-skew>Let’s build something worth scrolling&nbsp;for.</h2>
+      <p class="contact__sub" data-reveal>Open to collaborations, freelance and full-time roles. Let’s talk.</p>
+      <div class="contact__actions" data-reveal="0.1">
+        <a class="contact__email" href="mailto:gvickyronal@gmail.com" data-copy-email data-magnetic="0.2" data-cursor="Copy">
+          <span class="btn__inner"><span data-email>gvickyronal@gmail.com</span><small class="mono" data-copy-label>Click to copy</small></span>
+        </a>
+        <div class="contact__links">
+          <a class="link-arrow" href="https://www.behance.net/4b80edfb" target="_blank" rel="noopener">Behance <span aria-hidden="true">↗</span></a>
+          <a class="link-arrow" href="/assets/cv.pdf" download>Resume (PDF) <span aria-hidden="true">↓</span></a>
+          <a class="link-arrow" href="mailto:gvickyronal@gmail.com">Email <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span class="mono">© <span data-year>2026</span> Vignesh</span>
+    <span class="mono">Designed pixel by pixel in Chennai · <span data-clock>--:--</span></span>
+    <button type="button" class="footer__play mono" data-play data-magnetic="0.25"><span class="pixel" aria-hidden="true"></span>Play with pixels <kbd>P</kbd></button>
+    <a class="mono" href="#top">Back to top ↑</a>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
