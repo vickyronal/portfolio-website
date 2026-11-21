@@ -1,7 +1,7 @@
 import { WebGLRenderer, Scene, PerspectiveCamera, Group } from 'three';
 import { gsap } from '../core/motion.js';
 import { createPixels } from './pixels.js';
-import { SLOT, loadImage, sampleCanvas, imageToCanvas } from './shapes.js';
+import { SLOT, loadImage, halftone, imageToCanvas } from './shapes.js';
 
 // The persistent particle field. Other modules write to `state` (targets);
 // the render loop eases the live values towards them every frame.
@@ -9,7 +9,9 @@ import { SLOT, loadImage, sampleCanvas, imageToCanvas } from './shapes.js';
 export function createScene(canvas, { portrait } = {}) {
   const mobile = window.matchMedia('(max-width: 899px)').matches;
   const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 1.75);
-  const count = mobile ? 3200 : 7500;
+  // particle count per screen size: phone · laptop · large desktop
+  const laptop = !mobile && window.innerWidth <= 1600;
+  const count = mobile ? 3200 : laptop ? 4500 : 7500;
 
   let renderer;
   try {
@@ -34,11 +36,12 @@ export function createScene(canvas, { portrait } = {}) {
   if (mobile) pixels.uniforms.uSize.value = 2.1;
   const u = pixels.uniforms;
 
-  const state = { chapter: 0, alpha: 1, offset: 0, offsetY: 0 };
-  const live = { chapter: 0, alpha: 1, offset: 0, offsetY: 0 };
+  const state = { chapter: 0, alpha: 1, offset: 0, offsetY: 0, dotPx: 14, lock: 0 };
+  const live = { chapter: 0, alpha: 1, offset: 0, offsetY: 0, dotPx: 14 };
   const mouse = { x: 0, y: 0, lx: 0, ly: 0, moved: -10, inside: false };
   let viewW = 6, viewH = 6, baseScale = 1;
   let running = true;
+  let halftoneCell = 0.05; // world units; set once the portrait is sampled
 
   function resize() {
     const w = window.innerWidth, h = window.innerHeight;
@@ -76,16 +79,22 @@ export function createScene(canvas, { portrait } = {}) {
     const k = 0.085;
     live.chapter += (state.chapter - live.chapter) * k;
     live.alpha += (state.alpha - live.alpha) * k;
-    live.offset += (state.offset - live.offset) * 0.06;
-    live.offsetY += (state.offsetY - live.offsetY) * 0.06;
+    // drift while travelling; once the pixel has landed on the full stop it locks on
+    const follow = 0.06 + 0.5 * state.lock;
+    live.offset += (state.offset - live.offset) * follow;
+    live.offsetY += (state.offsetY - live.offsetY) * follow;
+    live.dotPx += (state.dotPx - live.dotPx) * 0.12;
+    u.uDotPx.value = live.dotPx;
     mouse.lx += (mouse.x - mouse.lx) * 0.05;
     mouse.ly += (mouse.y - mouse.ly) * 0.05;
 
     group.scale.setScalar(baseScale);
     group.position.x = live.offset * viewW;
     group.position.y = live.offsetY * viewH;
-    group.rotation.y = mouse.lx * 0.35 + Math.sin(time * 0.25) * 0.12;
-    group.rotation.x = mouse.ly * 0.22;
+    // the halftone portrait holds still so its dot grid stays crisp
+    const still = 1 - 0.9 * u.uRound.value;
+    group.rotation.y = (mouse.lx * 0.35 + Math.sin(time * 0.25) * 0.12) * still;
+    group.rotation.x = mouse.ly * 0.22 * still;
 
     // pointer influence fades after ~1.5s of stillness
     const active = mouse.inside && time - mouse.moved < 1.5 ? 1 : 0;
@@ -98,6 +107,8 @@ export function createScene(canvas, { portrait } = {}) {
     }
     u.uAspect.value = camera.aspect;
 
+    // halftone cell in px = world size × group scale × px per world unit
+    u.uCell.value = halftoneCell * baseScale * (window.innerHeight / viewH);
     pixels.setChapter(live.chapter);
     u.uTime.value = time;
     u.uAlpha.value = live.alpha;
@@ -112,8 +123,9 @@ export function createScene(canvas, { portrait } = {}) {
     if (portrait) {
       try {
         const img = await loadImage(portrait);
-        const arr = sampleCanvas(imageToCanvas(img, 200), count, { height: mobile ? 3.6 : 3.9, minWeight: 0.04, gamma: 2.2, depth: 0.35, edgeBoost: 3 });
-        pixels.replaceShape(SLOT.PORTRAIT, arr);
+        const ht = halftone(imageToCanvas(img, 420), count, { height: mobile ? 3.6 : 3.9 });
+        halftoneCell = ht.cell;
+        pixels.replaceShape(SLOT.PORTRAIT, ht.pos, ht.size);
       } catch { /* no portrait → the cloud stays */ }
     }
   }

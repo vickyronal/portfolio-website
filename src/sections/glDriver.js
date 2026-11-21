@@ -14,6 +14,7 @@ export function driveGL(gl, journey) {
   const toCraft = make('.craft', 'top bottom', 'top 30%');
   const toContact = make('.contact', 'top 65%', 'top 5%');
   const desktop = window.matchMedia('(min-width: 900px)');
+  const dot = document.querySelector('.contact__dot');
 
   const drive = { intro: 0 };
 
@@ -31,11 +32,23 @@ export function driveGL(gl, journey) {
     gl.state.alpha = Math.min(1, Math.max(0.12, alpha));
 
     // wide screens: portrait + journey shapes sit to the right of the text
-    gl.state.offset = wide
-      ? 0.21 * pro.progress * (1 - toWork.progress) + 0.2 * toJourney.progress * (1 - toCraft.progress) + 0.24 * toContact.progress
-      : 0;
-    // phones: the final pixel drops below the contact links
-    gl.state.offsetY = wide ? 0 : -0.2 * toContact.progress;
+    const base = wide ? 0.21 * pro.progress * (1 - toWork.progress) + 0.2 * toJourney.progress * (1 - toCraft.progress) : 0;
+    // finale: the last pixel lands exactly on the full stop of "…scrolling for."
+    const t = toContact.progress;
+    if (dot && t > 0) {
+      const r = dot.getBoundingClientRect();
+      const tx = (r.left + r.width / 2) / window.innerWidth - 0.5;
+      const ty = -((r.top + r.height / 2) / window.innerHeight - 0.5);
+      gl.state.offset = base * (1 - t) + tx * t;
+      gl.state.offsetY = ty * t;
+      gl.state.dotPx = 14 + (r.width - 14) * t;
+      gl.state.lock = t > 0.98 ? 1 : 0;
+    } else {
+      gl.state.offset = base;
+      gl.state.offsetY = 0;
+      gl.state.dotPx = 14;
+      gl.state.lock = 0;
+    }
   });
 
   return drive;

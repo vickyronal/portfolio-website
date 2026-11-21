@@ -259,3 +259,5 @@ p { text-wrap: pretty; }
   .nav__links { gap: 18px; }
   .footer__play { min-height: 44px; }
 }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

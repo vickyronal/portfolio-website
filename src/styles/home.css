@@ -256,3 +256,11 @@
 .preloader.is-sound .sound-bars b:nth-child(2) { animation-delay: 0.15s; }
 .preloader.is-sound .sound-bars b:nth-child(3) { animation-delay: 0.3s; }
 @keyframes eq { from { height: 3px; } to { height: 12px; } }
+
+/* the full stop of the final line is the pixel. With WebGL, the real
+   particle lands here (see glDriver); without it, this square shows instead. */
+.contact__dot {
+  display: inline-block; width: 0.13em; height: 0.13em; background: var(--accent);
+  margin-left: 0.04em; vertical-align: baseline;
+}
+.has-gl .contact__dot { visibility: hidden; }

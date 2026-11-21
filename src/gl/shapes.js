@@ -296,3 +296,70 @@ export function imageToCanvas(img, maxH = 180) {
   c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
   return c;
 }
+
+/**
+ * Halftone portrait: particles on a regular grid, dot size from brightness,
+ * edges that thin out and scatter into dust (like a printed halftone).
+ * Returns { pos, size, cell } where size is a fraction of one grid cell
+ * (0..~1) and `cell` is the grid spacing in world units.
+ */
+export function halftone(canvas, count, { height = 3.9, dust = 0.12, seed = 21 } = {}) {
+  const rand = mulberry32(seed);
+  const w = canvas.width, h = canvas.height;
+  const data = canvas.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, w, h).data;
+  const A = (x, y) => (x < 0 || y < 0 || x >= w || y >= h ? 0 : data[((y | 0) * w + (x | 0)) * 4 + 3] / 255);
+  const L = (x, y) => { const k = ((y | 0) * w + (x | 0)) * 4; return (0.2126 * data[k] + 0.7152 * data[k + 1] + 0.0722 * data[k + 2]) / 255; };
+
+  // grid spacing so the silhouette uses ~(1 - dust) of the particles
+  let opaque = 0;
+  for (let i = 3; i < data.length; i += 4) if (data[i] > 110) opaque++;
+  const step = Math.sqrt(opaque / (count * (1 - dust)));
+  const cols = Math.floor(w / step), rows = Math.floor(h / step);
+
+  // alpha + tone per cell, then a soft (blurred) alpha for the dissolving edge
+  const ca = new Float32Array(cols * rows), cl = new Float32Array(cols * rows);
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    const x = (c + 0.5) * step, y = (r + 0.5) * step;
+    ca[r * cols + c] = A(x, y);
+    cl[r * cols + c] = L(x, y);
+  }
+  const R = 3, soft = new Float32Array(cols * rows);
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    let s = 0, n = 0;
+    for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) {
+      const rr = r + dy, cc = c + dx;
+      if (rr >= 0 && cc >= 0 && rr < rows && cc < cols) s += ca[rr * cols + cc];
+      n++;
+    }
+    soft[r * cols + c] = s / n;
+  }
+
+  const k = height / h; // canvas px → world units
+  const pos = new Float32Array(count * 3), size = new Float32Array(count);
+  let i = 0;
+  const edge = [];
+  for (let r = 0; r < rows && i < count; r++) for (let c = 0; c < cols && i < count; c++) {
+    const a = ca[r * cols + c], s = soft[r * cols + c];
+    if (a < 0.43) continue;
+    if (rand() > Math.pow(s, 1.2) + 0.08) continue; // edges thin out
+    const l = cl[r * cols + c];
+    let tone = Math.min(1, Math.max(0, (l - 0.1) / 0.62)); // contrast curve
+    tone = tone * tone * (3 - 2 * tone);
+    pos[i * 3] = ((c + 0.5) * step - w / 2) * k;
+    pos[i * 3 + 1] = -((r + 0.5) * step - h / 2) * k;
+    pos[i * 3 + 2] = (tone - 0.5) * 0.06;
+    size[i] = (0.34 + 0.66 * tone) * (0.45 + 0.55 * Math.pow(s, 0.6));
+    if (s < 0.85) edge.push(i);
+    i++;
+  }
+  // the rest: dust drifting off the silhouette edge
+  for (; i < count; i++) {
+    const from = edge.length ? edge[(rand() * edge.length) | 0] : 0;
+    const ang = rand() * Math.PI * 2, dist = step * k * (1 + Math.pow(rand(), 2) * 9);
+    pos[i * 3] = pos[from * 3] + Math.cos(ang) * dist;
+    pos[i * 3 + 1] = pos[from * 3 + 1] + Math.sin(ang) * dist;
+    pos[i * 3 + 2] = gauss(rand) * 0.05;
+    size[i] = 0.12 + rand() * 0.28;
+  }
+  return { pos, size, cell: step * k };
+}
