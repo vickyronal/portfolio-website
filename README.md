@@ -39,11 +39,14 @@ Suggested sizes: cover 2400×1350 (16:9), gallery 2000×1500 (4:3) and the first
 
 ## Add a new project
 
-Add an entry to `projects` in `content.js`. Then copy `scripts/case-template.html` to `work/<slug>.html`, replacing `__SLUG__` and `__TITLE__`. Finally, add the page to `vite.config.js` → `rollupOptions.input`.
+1. Add the project to `projects` in `src/data/content.js`: copy an existing entry and change it. Include the short `headlines` for brief, problem, solution and role.
+2. Run `npm run new-project <slug> "<Title>"` to create its case-study page. The build picks up every page in `/work` automatically.
+3. Put its images in `public/assets/images/<slug>/` (`cover.jpg`, `gallery-01.jpg`, …).
+4. Set `featured: false` to keep it on the All work page only (`/work/`). The home page shows the first 4 featured projects.
 
 ## Replace the CV
 
-Overwrite `public/assets/cv.pdf`.
+Overwrite `public/assets/Vignesh-G-Senior-Visual-Designer-Resume.pdf`.
 
 ## Structure
 

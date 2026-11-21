@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Moneytrace · Vignesh</title>
-  <meta name="description" content="Moneytrace: a case study by Vignesh, Senior Visual & UI Designer." />
+  <title>All work · Vignesh</title>
+  <meta name="description" content="All projects by Vignesh: brand identity, web design and product design." />
   <meta name="theme-color" content="#0B0B0C" />
-  <meta property="og:title" content="Moneytrace · Vignesh" />
+  <meta property="og:title" content="All work · Vignesh" />
   <meta property="og:image" content="/assets/og.png" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
@@ -16,8 +16,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" />
   <script>try{if(sessionStorage.getItem('vg-curtain'))document.documentElement.classList.add('is-arriving')}catch(e){}</script>
 </head>
-<body data-page="case" data-slug="moneytrace">
-  <a class="skip" href="#case">Skip to content</a>
+<body data-page="all">
+  <a class="skip" href="#all">Skip to content</a>
   <div class="curtain" aria-hidden="true"><span class="pixel"></span></div>
   <div class="grain" aria-hidden="true"></div>
   <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"><span class="cursor__label"></span></span></div>
@@ -25,14 +25,23 @@
   <header class="nav" data-nav>
     <a href="/" class="nav__logo" aria-label="Vignesh, home"><span class="pixel"></span>Vignesh</a>
     <nav class="nav__links" aria-label="Primary">
-      <a href="/#journey">Journey</a>
       <a href="/#work">Work</a>
+      <a href="/#journey">Journey</a>
       <a href="/#contact">Contact</a>
     </nav>
     <span class="nav__clock mono">Chennai · <span data-clock>--:--</span></span>
   </header>
 
-  <main id="case"></main>
+  <main id="all">
+    <header class="all-hero">
+      <a class="cs-back mono" href="/">← Home</a>
+      <p class="label mono">(Index) All work · <span data-all-count></span> projects</p>
+      <h1 class="all-hero__title">All work<span class="hero__dot" aria-hidden="true"></span></h1>
+      <p class="all-hero__sub">Brand identities, websites and complete products, designed between 2019 and today.</p>
+      <div class="all-filters" role="group" aria-label="Filter projects" data-all-filters></div>
+    </header>
+    <ol class="all-grid" data-all-grid></ol>
+  </main>
 
   <section class="cs-contact">
     <p class="mono">Like what you see?</p>
@@ -46,6 +55,6 @@
     <a class="mono" href="/">Home ↑</a>
   </footer>
 
-  <script type="module" src="/src/case.js"></script>
+  <script type="module" src="/src/all.js"></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 import { gsap, ScrollTrigger, SplitText, reduced } from '../core/motion.js';
+import { scrollTo } from '../core/lenis.js';
 
 // Desktop: pinned horizontal scroll through the chapters.
 // Mobile / reduced motion: chapters stack vertically.
@@ -8,15 +9,25 @@ export function initJourney() {
   const track = section.querySelector('[data-journey-track]');
   const chapters = [...track.querySelectorAll('.chapter')];
   const bar = section.querySelector('.journey__bar i');
-  const counter = section.querySelector('[data-journey-count]');
+  const steps = [...section.querySelectorAll('.jstep')];
   const total = chapters.length;
   let active = null;
+  let horizontal = false;
+  let current = -1;
 
   const setCount = (p) => {
-    const i = Math.min(total - 1, Math.floor(p * total * 0.999));
-    if (counter) counter.textContent = chapters[i].querySelector('.chapter__year').textContent;
+    const i = horizontal ? Math.round(p * (total - 1)) : Math.min(total - 1, Math.floor(p * total * 0.999));
+    if (i === current) return;
+    current = i;
     chapters.forEach((c, j) => c.classList.toggle('is-active', j === i));
+    steps.forEach((s, j) => { s.classList.toggle('is-active', j === i); s.setAttribute('aria-current', j === i ? 'step' : 'false'); });
   };
+
+  // click a company → glide to its chapter
+  steps.forEach((s, i) => s.addEventListener('click', () => {
+    if (horizontal && active) scrollTo(active.start + (active.end - active.start) * (i / (total - 1)), { duration: 1.4 });
+    else scrollTo(chapters[i], { offset: -60, duration: 1.2 });
+  }));
 
   if (reduced) {
     active = ScrollTrigger.create({ trigger: section, start: 'top center', end: 'bottom center', onUpdate: (self) => setCount(self.progress) });
@@ -40,14 +51,15 @@ export function initJourney() {
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         gsap.set(bar, { scaleX: self.progress });
+        horizontal = true;
         setCount(self.progress);
       },
     });
 
     chapters.forEach((ch, i) => {
       const year = ch.querySelector('.chapter__year');
-      const parts = ch.querySelectorAll('.chapter__count, .chapter__meta, .chapter__story, .chapter__points li');
-      const title = SplitText.create(ch.querySelector('.chapter__title'), { type: 'chars', mask: 'chars' });
+      const parts = ch.querySelectorAll('.chapter__kicker, .chapter__role, .chapter__dates, .chapter__story, .chapter__detail, .chapter__tools, .chapter__work');
+      const title = SplitText.create(ch.querySelector('.chapter__company'), { type: 'words,chars', mask: 'chars' });
 
       // big year slides at a different speed than the panel (parallax)
       gsap.fromTo(year, { xPercent: 30 }, {
@@ -59,11 +71,12 @@ export function initJourney() {
         ? { trigger: section, start: 'top 55%', toggleActions: 'play none none reverse' }
         : { trigger: ch, containerAnimation: tween, start: 'left 65%', toggleActions: 'play none none reverse' };
       gsap.timeline({ scrollTrigger: st })
-        .from(title.chars, { yPercent: 110, stagger: 0.03, duration: 1.1 })
+        .from(title.chars, { yPercent: 110, stagger: 0.02, duration: 1.1 })
         .from(parts, { y: 30, autoAlpha: 0, stagger: 0.06, duration: 1 }, '<0.15');
     });
 
-    return () => { active = null; };
+    horizontal = true;
+    return () => { active = null; horizontal = false; };
   });
 
   mm.add('(max-width: 899px)', () => {

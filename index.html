@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vignesh · Senior Visual Designer</title>
-  <meta name="description" content="Vignesh is a Senior Visual & UI Designer in Chennai with 6+ years across brand, UI/UX and digital design. From a pixel to powerful interfaces." />
+  <meta name="description" content="Vignesh is a Senior Visual & UI Designer in Chennai with 7+ years across brand, UI/UX and digital design. From a pixel to powerful interfaces." />
   <meta name="theme-color" content="#0B0B0C" />
   <meta property="og:title" content="Vignesh · Senior Visual Designer" />
-  <meta property="og:description" content="From a pixel to powerful interfaces. Six years of design, told as a story." />
+  <meta property="og:description" content="From a pixel to powerful interfaces. Seven years of design, told as a story." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="/assets/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -17,15 +17,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=general-sans@400,500&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" />
-  <script>try{if(sessionStorage.getItem('vg-curtain'))document.documentElement.classList.add('is-arriving')}catch(e){}</script>
+  <script>try{if(sessionStorage.getItem('vg-curtain'))document.documentElement.classList.add('is-arriving');else if(location.hash){history.replaceState(null,'',location.pathname+location.search);}}catch(e){}</script>
 </head>
 <body data-page="home">
   <a class="skip" href="#work">Skip to work</a>
 
-  <div class="preloader" aria-hidden="true">
-    <span class="preloader__pixel"></span>
-    <span class="preloader__count mono">000</span>
-    <span class="preloader__label mono">Rendering pixels</span>
+  <div class="preloader" role="status" aria-label="Loading">
+    <p class="preloader__corner preloader__corner--tl mono">Vignesh · Portfolio</p>
+    <button type="button" class="preloader__corner preloader__corner--tr preloader__sound mono" data-sound-toggle><i class="sound-bars"><b></b><b></b><b></b></i><span data-sound-label>Sound off · tap for sound</span></button>
+    <div class="preloader__matrix" aria-hidden="true"><span class="preloader__cursor"></span></div>
+    <p class="preloader__corner preloader__corner--bl mono">From a pixel to powerful interfaces</p>
+    <p class="preloader__corner preloader__corner--br mono">PX <b class="preloader__count">000</b> / <span class="preloader__total">000</span></p>
   </div>
   <div class="curtain" aria-hidden="true"><span class="pixel"></span></div>
   <canvas class="gl" aria-hidden="true"></canvas>
@@ -35,8 +37,8 @@
   <header class="nav" data-nav>
     <a href="/" class="nav__logo" aria-label="Vignesh, home"><span class="pixel"></span>Vignesh</a>
     <nav class="nav__links" aria-label="Primary">
-      <a href="#journey">Journey</a>
       <a href="#work">Work</a>
+      <a href="#journey">Journey</a>
       <a href="#contact">Contact</a>
     </nav>
     <span class="nav__clock mono">Chennai · <span data-clock>--:--</span></span>
@@ -52,9 +54,9 @@
           <span class="hero__line hero__name">Vignesh<span class="hero__dot" aria-hidden="true"></span></span>
         </h1>
         <div class="hero__bottom">
-          <p class="hero__intro" data-hero-fade>Senior Visual &amp; UI Designer crafting intuitive digital experiences for startups and brands.</p>
+          <p class="hero__intro" data-hero-fade><span class="hero__intro-role">Senior Visual &amp; UI Designer</span><span class="hero__intro-line">Crafting intuitive digital experiences for startups and brands.</span></p>
           <div class="hero__actions" data-hero-fade>
-            <a class="btn btn--accent" href="/assets/cv.pdf" download data-magnetic><span class="btn__inner">Download CV <span aria-hidden="true">↓</span></span></a>
+            <a class="btn btn--accent" href="/assets/Vignesh-G-Senior-Visual-Designer-Resume.pdf" download="Vignesh-G-Senior-Visual-Designer-Resume.pdf" data-magnetic><span class="btn__inner">Download CV <span aria-hidden="true">↓</span></span></a>
             <a class="btn btn--ghost" href="#work" data-magnetic><span class="btn__inner">See the work</span></a>
           </div>
         </div>
@@ -68,25 +70,32 @@
     <!-- 02 PROLOGUE -->
     <section class="prologue" aria-labelledby="prologue-title">
       <p class="label mono" id="prologue-title">(02) Prologue</p>
-      <p class="prologue__text" data-skew>Every interface begins as a single pixel. Mine began in 2018, cutting frames as a video editor. Then came shapes, then screens, then systems. Six years later, I lead visual design that turns briefs into stories people remember.</p>
+      <p class="prologue__text" data-skew>Every interface begins as a single pixel. Mine began in 2018, cutting frames as a video editor. Then came shapes, then screens, then systems. Today, I lead visual design that turns briefs into stories people remember.</p>
     </section>
 
-    <!-- 03 JOURNEY -->
-    <section class="journey" id="journey" aria-labelledby="journey-title">
-      <div class="journey__head">
-        <h2 class="label mono" id="journey-title">(03) The Journey · 2018 → Now</h2>
-        <div class="journey__progress mono"><span data-journey-count>2018</span><span class="journey__bar"><i></i></span><span>Now</span></div>
-      </div>
-      <div class="journey__track" data-journey-track></div>
-    </section>
-
-    <!-- 04 WORK -->
+    <!-- 03 WORK -->
     <section class="work" id="work" aria-labelledby="work-title">
       <div class="section-head">
-        <p class="label mono">(04) Selected work</p>
+        <p class="label mono">(03) Selected work</p>
         <h2 class="section-title" id="work-title" data-split data-skew>Pixels that became products.</h2>
       </div>
       <ol class="work__list" data-work-list></ol>
+      <div class="work__more" data-reveal>
+        <p class="work__more-text">These are a few highlights. There’s more brand, web and product work inside.</p>
+        <a class="btn btn--accent" href="/work/" data-magnetic><span class="btn__inner">See all work <span class="mono" data-work-total></span> <span aria-hidden="true">→</span></span></a>
+      </div>
+    </section>
+
+    <!-- 04 JOURNEY -->
+    <section class="journey" id="journey" aria-labelledby="journey-title">
+      <div class="journey__head">
+        <h2 class="label mono" id="journey-title">(04) Experience · 2018 → Now</h2>
+        <nav class="journey__nav" aria-label="Companies">
+          <ol class="journey__steps" data-journey-steps></ol>
+          <span class="journey__bar" aria-hidden="true"><i></i></span>
+        </nav>
+      </div>
+      <div class="journey__track" data-journey-track></div>
     </section>
 
     <!-- 05 CRAFT -->
@@ -117,7 +126,7 @@
         </a>
         <div class="contact__links">
           <a class="link-arrow" href="https://www.behance.net/4b80edfb" target="_blank" rel="noopener">Behance <span aria-hidden="true">↗</span></a>
-          <a class="link-arrow" href="/assets/cv.pdf" download>Resume (PDF) <span aria-hidden="true">↓</span></a>
+          <a class="link-arrow" href="/assets/Vignesh-G-Senior-Visual-Designer-Resume.pdf" download="Vignesh-G-Senior-Visual-Designer-Resume.pdf">Resume (PDF) <span aria-hidden="true">↓</span></a>
           <a class="link-arrow" href="mailto:gvickyronal@gmail.com">Email <span aria-hidden="true">→</span></a>
         </div>
       </div>

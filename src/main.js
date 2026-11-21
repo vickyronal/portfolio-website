@@ -56,7 +56,10 @@ async function boot() {
     if (drive) gsap.to(drive, { intro: 1, duration: 2.6, ease: 'expo.out' });
     playHero(heroSplit);
     lenis?.start();
-    if (location.hash) setTimeout(() => scrollTo(location.hash, { immediate: true }), 50);
+    // only jump to a section when we arrived by clicking a link inside the site;
+    // a fresh visit or refresh always starts at the hero
+    if (location.hash && arriving) setTimeout(() => scrollTo(location.hash, { immediate: true }), 50);
+    else if (location.hash) history.replaceState(null, '', location.pathname);
   };
 
   if (arriving) {

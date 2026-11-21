@@ -36,8 +36,8 @@ export function initMediaReveals(scope = document) {
     });
     const inner = el.querySelector('.media > *:not(.ph__label)');
     if (inner) {
-      gsap.fromTo(inner, { yPercent: -6, scale: 1.12 }, {
-        yPercent: 6, scale: 1.12, ease: 'none',
+      gsap.fromTo(inner, { yPercent: -2.5, scale: 1.05 }, {
+        yPercent: 2.5, scale: 1.05, ease: 'none',
         scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
       });
     }

@@ -7,9 +7,10 @@ export function initWork() {
   const cards = [...document.querySelectorAll('.work .card')];
   if (reduced) return;
 
+  const stacked = window.matchMedia('(min-width: 900px)').matches;
   cards.forEach((card, i) => {
     const next = cards[i + 1];
-    if (!next) return;
+    if (!next || !stacked) return;
     gsap.fromTo(card.querySelector('.card__link'), { filter: 'brightness(1)' }, {
       filter: 'brightness(0.3)',
       ease: 'none',

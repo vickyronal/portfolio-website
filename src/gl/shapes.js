@@ -1,6 +1,6 @@
 // Point-set generators. Each returns a Float32Array(count * 3).
 // The particles morph between these sets, chapter by chapter:
-// 0 single → 1 cloud → 2 portrait → 3 frame → 4 shapes → 5 screen → 6 system → 7 compass → 8 cloud → 9 single
+// 0 single → 1 cloud → 2 portrait → 3 cloud → 4 frame → 5 shapes → 6 screen → 7 system → 8 compass → 9 cloud → 10 single
 
 function mulberry32(seed) {
   return function () {
@@ -224,13 +224,14 @@ export function buildShapes(count) {
     sp, //                       0 the first pixel
     cl, //                       1 cloud (hero)
     cl.slice(), //               2 portrait (prologue)
-    filmFrame(count, rand), //   3 2018 frame
-    geoShapes(count, rand), //   4 2019 shapes
-    screen(count, rand), //      5 2020 screen
-    system(count, rand), //      6 2022 system
-    compass(count, rand), //     7 2026 compass
-    cl, //                       8 cloud again: quiet background behind work / craft
-    single(count, rand), //      9 the last pixel
+    cl, //                       3 quiet background cloud behind Selected Work
+    filmFrame(count, rand), //   4 2018 frame
+    geoShapes(count, rand), //   5 2019 shapes
+    screen(count, rand), //      6 2020 screen
+    system(count, rand), //      7 2022 system
+    compass(count, rand), //     8 2026 compass
+    cl, //                       9 background cloud behind craft / numbers
+    single(count, rand), //      10 the last pixel
   ];
 }
 

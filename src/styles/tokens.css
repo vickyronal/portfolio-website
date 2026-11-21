@@ -4,6 +4,7 @@
   --surface: #141416;
   --surface-2: #1c1c1f;
   --text: #f2f0eb;
+  --text-2: #cfcdc8;   /* secondary reading text */
   --muted: #8a8a8e;
   --dim: #55555a;
   --accent: #ffd60a;
@@ -16,10 +17,24 @@
   --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
 
   --gutter: clamp(16px, 4vw, 56px);
-  --radius: clamp(16px, 2vw, 28px);
+  --radius: clamp(16px, 2vw, 28px);  /* large surfaces: cards, covers */
+  --radius-md: 20px;                 /* tiles, process cards, gallery */
+  --radius-sm: 10px;                 /* small chips, kbd, skip link */
+  --radius-pill: 999px;              /* buttons, tags, filters */
+  /* ── tracking ── */
+  --track-display: -0.05em;
+  --track-heading: -0.035em;
+  --track-title: -0.02em;
   --ease: cubic-bezier(0.65, 0.05, 0, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
+  /* ── type scale ── one size per role; every heading in the site uses these */
+  --fs-name: clamp(4.5rem, 20.5vw, 22rem);            /* hero name only */
+  --fs-display: clamp(3.5rem, 1rem + 11vw, 13rem);    /* page titles: case study, All work */
+  --fs-display-s: clamp(3rem, 1rem + 8vw, 10rem);     /* contact, next project, stats, marquee */
+  --fs-statement: clamp(1.9rem, 1rem + 3.4vw, 4.4rem);/* prologue statement */
+  --fs-h4: clamp(1.5rem, 1.1rem + 1.4vw, 2.4rem);     /* card + block titles */
+  --fs-body-l: clamp(1.05rem, 0.98rem + 0.3vw, 1.2rem); /* long-form reading text */
   --fs-mono: 0.75rem;
   --fs-body: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
   --fs-lead: clamp(1.25rem, 1rem + 1.2vw, 2rem);

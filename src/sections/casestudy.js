@@ -11,52 +11,75 @@ export function renderCase(slug) {
   document.title = `${p.title}: ${p.category} · Vignesh`;
   document.documentElement.style.setProperty('--c', p.color);
 
-  const block = (n, label, body) => `
-    <section class="cs-block">
-      <p class="cs-block__label mono"><span>${pad(n)}</span> ${label}</p>
-      <div class="cs-block__body"><p data-split>${body || soon}</p></div>
-    </section>`;
-
   let n = 0;
-  const process = p.process.length
-    ? `<section class="cs-block cs-block--wide">
-        <p class="cs-block__label mono"><span>${pad(++n + 3)}</span> My process</p>
-        <ol class="process">${p.process
-          .map((s, k) => `<li class="process__step" data-reveal="${(k % 3) * 0.08}"><span class="mono">${pad(k + 1)}</span><h3>${s.title}</h3><p>${s.text}</p></li>`)
-          .join('')}</ol>
-      </section>`
+  const label = (text) => `<p class="cs-block__label mono"><span>${pad(++n)}</span> ${text}</p>`;
+  // Readable sections: a short heading in the display font, then the
+  // explanation in the body font at a comfortable size and line length.
+  const block = (title, body, extra = '', heading = '') => `
+    <section class="cs-block">
+      ${label(title)}
+      <div class="cs-block__body">
+        ${heading ? `<h2 class="cs-block__title" data-split>${heading}</h2>` : ''}
+        <p class="cs-block__text" data-reveal>${body || soon}</p>
+        ${extra}
+      </div>
+    </section>`;
+  const h = p.headlines || {};
+  const cards = (title, items) =>
+    items && items.length
+      ? `<section class="cs-block cs-block--wide">
+          ${label(title)}
+          <ol class="process">${items
+            .map((s, k) => `<li class="process__step" data-reveal="${(k % 3) * 0.08}"><span class="mono">${pad(k + 1)}</span><h3>${s.title}</h3><p>${s.text}</p></li>`)
+            .join('')}</ol>
+        </section>`
+      : '';
+  const scope = p.scope?.length
+    ? `<ul class="scope">${p.scope.map((x) => `<li data-reveal>${x}</li>`).join('')}</ul>`
     : '';
-  const competitors = p.competitors.length
-    ? `<section class="cs-block">
-        <p class="cs-block__label mono"><span>${pad(++n + 3)}</span> Competitor analysis</p>
-        <div class="cs-block__body">
-          <p data-split>I benchmarked the market leaders to see where they made things complicated, and where we could be simpler.</p>
-          <ul class="competitors">${p.competitors.map((c) => `<li data-reveal>${c}</li>`).join('')}</ul>
-        </div>
-      </section>`
+  const competitors = p.competitors?.length
+    ? block(
+        'Competitor analysis',
+        'I benchmarked the market leaders to see where they made things complicated, and where we could be simpler.',
+        `<ul class="competitors">${p.competitors.map((c) => `<li data-reveal>${c}</li>`).join('')}</ul>`
+      )
     : '';
+  const meta = [
+    ['Role', p.role],
+    ['Company', p.company],
+    ['Scope', p.platform],
+    ['Duration', p.duration],
+  ].filter(([, v]) => v && v !== '—');
+  const live = p.link
+    ? `<a class="btn btn--accent cs-live" href="${p.link}" target="_blank" rel="noopener" data-magnetic data-hero-fade><span class="btn__inner">Visit live site <span aria-hidden="true">↗</span></span></a>`
+    : '';
+
+  const body = `
+    ${block('The brief', p.brief, '', h.brief)}
+    ${block('The problem', p.problem, '', h.problem)}
+    ${p.solution ? block('The solution', p.solution, '', h.solution) : ''}
+    ${block('My role', p.story, scope, h.role)}
+    ${cards('Key design decisions', p.highlights)}
+    ${cards('My process', p.process)}
+    ${competitors}`;
 
   document.querySelector('#case').innerHTML = `
     <header class="cs-hero">
-      <a class="cs-back mono" href="/#work">← All work</a>
+      <a class="cs-back mono" href="/work/">← All work</a>
       <p class="cs-hero__eyebrow mono">Case study ${pad(i + 1)} · ${p.category}</p>
       <h1 class="cs-hero__title">${p.title}</h1>
-      <p class="cs-hero__pitch" data-hero-fade>${p.pitch}</p>
+      <div class="cs-hero__row">
+        <p class="cs-hero__pitch" data-hero-fade>${p.pitch}</p>
+        ${live}
+      </div>
       <dl class="cs-meta" data-hero-fade>
-        <div><dt class="mono">Role</dt><dd>${p.role}</dd></div>
-        <div><dt class="mono">Duration</dt><dd>${p.duration}</dd></div>
-        <div><dt class="mono">Platform</dt><dd>${p.platform}</dd></div>
-        <div><dt class="mono">Discipline</dt><dd>${p.category}</dd></div>
+        ${meta.map(([k, v]) => `<div><dt class="mono">${k}</dt><dd>${v}</dd></div>`).join('')}
       </dl>
     </header>
 
-    <div class="cs-cover" data-cover>${media(p.cover, { title: p.title, color: p.color, label: 'Cover 16:9' })}</div>
+    <div class="cs-cover" data-cover>${media(p.cover, { title: p.title, color: p.color, label: 'Cover 16:9', logo: p.logo })}</div>
 
-    ${block(1, 'The brief', p.brief)}
-    ${block(2, 'The problem', p.problem)}
-    ${block(3, 'My story', p.story)}
-    ${process}
-    ${competitors}
+    ${body}
 
     <section class="cs-gallery">
       ${p.gallery.map((g, k) => `<div class="cs-gallery__item ${k === 0 ? 'is-wide' : ''}" data-media-reveal>${media(g, { title: p.title, color: p.color, label: `Screen ${pad(k + 1)}` })}</div>`).join('')}
@@ -73,7 +96,7 @@ export function renderCase(slug) {
 
 export function animateCase() {
   if (reduced) return;
-  const split = SplitText.create('.cs-hero__title', { type: 'chars', mask: 'chars' });
+  const split = SplitText.create('.cs-hero__title', { type: 'words,chars', mask: 'chars' });
   const tl = gsap.timeline();
   tl.from(split.chars, { yPercent: 115, stagger: 0.04, duration: 1.4 })
     .from('.cs-hero__eyebrow, .cs-back', { autoAlpha: 0, y: 16, duration: 1 }, '<0.2')
@@ -87,7 +110,7 @@ export function animateCase() {
 
   const nextTitle = document.querySelector('.cs-next__title');
   gsap.from(nextTitle, {
-    xPercent: 20, ease: 'none',
+    x: 60, ease: 'none',
     scrollTrigger: { trigger: '.cs-next', start: 'top bottom', end: 'bottom bottom', scrub: true },
   });
 }

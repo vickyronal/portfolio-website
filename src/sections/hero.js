@@ -3,7 +3,7 @@ import { gsap, SplitText, reduced } from '../core/motion.js';
 export function prepareHero() {
   if (reduced) return null;
   const title = document.querySelector('.hero__title');
-  const split = SplitText.create(title.querySelectorAll('.hero__line'), { type: 'chars', mask: 'chars' });
+  const split = SplitText.create(title.querySelectorAll('.hero__line'), { type: 'words,chars', mask: 'chars' });
   gsap.set(split.chars, { yPercent: 115 });
   gsap.set('.hero [data-hero-fade]', { autoAlpha: 0, y: 24 });
   return split;
@@ -12,7 +12,7 @@ export function prepareHero() {
 export function playHero(split) {
   if (!split) return;
   const tl = gsap.timeline();
-  tl.to(split.chars, { yPercent: 0, duration: 1.5, ease: 'expo.out', stagger: 0.035 })
+  tl.to(split.chars, { yPercent: 0, duration: 1.5, ease: 'expo.out', stagger: 0.035, onComplete: () => split.revert() })
     .to('.hero [data-hero-fade]', { autoAlpha: 1, y: 0, duration: 1.2, stagger: 0.08 }, '-=1.1')
     .from('.nav', { yPercent: -100, autoAlpha: 0, duration: 1 }, '-=1.2');
 
